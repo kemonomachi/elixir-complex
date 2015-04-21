@@ -1,0 +1,4 @@
+%{"erlport": {:git, "git://github.com/hdima/erlport.git", "4041c0810f798cba9fa528ebca90556f0ae50645", []},
+  "exmath": {:git, "git://github.com/kemonomachi/exmath.git", "d53cc4acfb0bce5db13f2d551afabd4a756d0714", []},
+  "primes": {:git, "git://github.com/ewildgoose/elixir-primes.git", "5c61a927cad3ba33be5642fa67be646c46a90a59", []},
+  "random": {:git, "git://github.com/mururu/elixir-random.git", "16f1ebf527a25916e07c20950db25994a1adba73", []}}
