@@ -189,6 +189,6 @@ defmodule Complex do
 
   
   @spec sum([cnum]) :: t
-  def sum(numbers), do: Enum.map(numbers, &add/2)
+  def sum(numbers), do: Enum.reduce(numbers, new(0, 0), &add/2)
 end
 
