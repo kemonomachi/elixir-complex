@@ -75,30 +75,36 @@ defmodule Complex do
   end
   def sign(x), do: ExMath.sign(x)
 
-  @spec add(cnum, cnum) :: t
+  @spec add(cnum, cnum) :: cnum
   def add(%Complex{r: r1, i: i1}, %Complex{r: r2, i: i2}) do
     new r1 + r2, i1 + i2
   end
-  def add(a, b), do: add(convert(a), convert(b))
+  def add(%Complex{r: r1, i: i}, r2), do: new(r1 + r2, i)
+  def add(r1, %Complex{r: r2, i: i}), do: new(r1 + r2, i)
+  def add(a, b), do: a + b
 
-  @spec sub(cnum, cnum) :: t
+  @spec sub(cnum, cnum) :: cnum
   def sub(%Complex{r: r1, i: i1}, %Complex{r: r2, i: i2}) do
     new r1 - r2, i1 - i2
   end
-  def sub(a, b), do: sub(convert(a), convert(b))
+  def sub(%Complex{r: r1, i: i}, r2), do: new(r1 - r2, i)
+  def sub(r1, %Complex{r: r2, i: i}), do: new(r1 - r2, -i)
+  def sub(a, b), do: a - b
 
-  @spec mul(cnum, cnum) :: t
+  @spec mul(cnum, cnum) :: cnum
   def mul(%Complex{r: r1, i: i1}, %Complex{r: r2, i: i2}) do
     new r1*r2 - i1*i2, r1*i2 + i1*r2
   end
-  def mul(a, b), do: mul(convert(a), convert(b))
+  def mul(%Complex{r: r, i: i}, x), do: new(x*r, x*i)
+  def mul(x, %Complex{r: r, i: i}), do: new(x*r, x*i)
+  def mul(a, b), do: a*b
 
   @doc """
   A slightly unusual algorithm is used to avoid over- and underflow errors.
 
   Inspired by Python's [complex division method](https://github.com/python/cpython/blob/60b3703e5b567520de9a848d47cd381f49872f2f/Objects/complexobject.c#L52).
   """
-  @spec div(cnum, cnum) :: t
+  @spec div(cnum, cnum) :: t | float
   def div(%Complex{r: r1, i: i1}, %Complex{r: r2, i: i2}) do
     if Kernel.abs(r2) >= Kernel.abs(i2) do
       rat = i2/r2
@@ -112,7 +118,9 @@ defmodule Complex do
       Complex.new (r1*rat + i1)/den, (i1*rat - r1)/den
     end
   end
-  def div(a, b), do: div(convert(a), convert(b))
+  def div(%Complex{r: r, i: i}, x), do: new(r/x, i/x)
+  def div(a, b = %Complex{}), do: div(convert(a), b)
+  def div(a, b), do: a/b
 
 
   @doc """
@@ -188,7 +196,8 @@ defmodule Complex do
   def sqrt(x), do: :math.sqrt(x)
 
   
-  @spec sum([cnum]) :: t
-  def sum(numbers), do: Enum.reduce(numbers, new(0, 0), &add/2)
+  @spec sum([cnum]) :: cnum
+  def sum([]), do: 0
+  def sum(numbers), do: Enum.reduce(numbers, &add/2)
 end
 
