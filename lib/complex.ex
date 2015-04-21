@@ -186,5 +186,9 @@ defmodule Complex do
   end
   def sqrt(x) when x < 0, do: new(0, :math.sqrt(-x))
   def sqrt(x), do: :math.sqrt(x)
+
+  
+  @spec sum([cnum]) :: t
+  def sum(numbers), do: Enum.map(numbers, &add/2)
 end
 
